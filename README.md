@@ -8,27 +8,157 @@
 Nuxt module to define and easily consume your backend API in a validated and
 type-safe way using procedures and Zod schemas.
 
-- [✨ &nbsp;Release Notes](/CHANGELOG.md)
-  <!-- - [🏀 Online playground](https://stackblitz.com/github/your-org/nuxt-procedures?file=playground%2Fapp.vue) -->
-  <!-- - [📖 &nbsp;Documentation](https://example.com) -->
+- [🏀 Online playground](https://stackblitz.com/github/andresberrios/nuxt-procedures?file=playground%2Fapp.vue)
 
 ## Features
 
-<!-- Highlight some of the features your module provide here -->
+- **Type-Safe API Layer:** End-to-end type safety for your API calls.
+- **Zod Validation:** Use Zod schemas to validate inputs and outputs.
+- **Automatic API Client:** An `apiClient` is automatically generated based on your procedures.
+- **`useFetch` Integration:** Seamlessly integrates with Nuxt's `useFetch` for easy data fetching in your components.
+- **`superjson` Support:** Automatically handles serialization of complex data types.
 
-- ⛰ &nbsp;Foo
-- 🚠 &nbsp;Bar
-- 🌲 &nbsp;Baz
+## Installation
 
-## Quick Setup
+### Quick Install (Recommended)
 
-Install the module to your Nuxt application with one command:
+Install and configure the module with a single command:
 
 ```bash
 npx nuxi module add nuxt-procedures
 ```
+This will add `nuxt-procedures` to your `package.json` and `nuxt.config.ts`.
 
-That's it! You can now use Nuxt Procedures in your Nuxt app ✨
+You also need to install its peer dependency, `zod`:
+```bash
+npm install zod
+```
+
+### Manual Install
+
+1. Install the packages:
+
+```bash
+npm install nuxt-procedures zod
+```
+
+2. Add the module to your `nuxt.config.ts`:
+
+```typescript
+export default defineNuxtConfig({
+  modules: ['nuxt-procedures'],
+})
+```
+
+## Usage
+
+### 1. Define Procedures
+
+Create `.ts` files in your `server/api` directory. The module will automatically create a corresponding client for each file.
+
+#### Simple Example
+
+For a simple input and output, you can use Zod schemas directly.
+
+`server/api/hello.ts`:
+```typescript
+import { z } from 'zod'
+
+export default defineProcedure({
+  input: z.string(),
+  output: z.string(),
+  handler: async ({ input }) => {
+    return `Hello, ${input}!`
+  },
+})
+```
+
+#### Complex Example
+
+For more complex scenarios, `z.object` is the way to go. This is useful for things like form submissions or creating database entries.
+
+`server/api/users/create.ts`:
+```typescript
+import { z } from 'zod'
+
+export default defineProcedure({
+  input: z.object({
+    name: z.string(),
+    email: z.string().email(),
+    role: z.enum(['admin', 'user']).default('user'),
+  }),
+  output: z.object({
+    id: z.string(),
+    name: z.string(),
+    email: z.string(),
+  }),
+  handler: async ({ input, event }) => {
+    // The event param gives you access to the request context and Nuxt utilities
+    // For example, you can access request headers
+    const headers = getRequestHeaders(event)
+    console.log(headers)
+
+    // In a real app, you would create a user in your database
+    // The following is just an example of how you could get a db client
+    const db = await useDB(event)
+    const newUser = await db.user.create({
+      data: input,
+    })
+    
+    return newUser
+  },
+})
+```
+
+### 2. Use the `apiClient`
+
+The module automatically generates an `apiClient` that you can use in your components or pages. The structure of the `apiClient` mirrors your `server/api` directory.
+
+#### `useCall`
+
+The `useCall` method is a wrapper around Nuxt's `useFetch` and is the recommended way to call procedures from your Vue components.
+
+Calling the simple `hello` procedure:
+```vue
+<script setup lang="ts">
+const { data: greeting, pending } = await apiClient.hello.useCall('World')
+</script>
+
+<template>
+  <p v-if="pending">Loading...</p>
+  <p v-else>{{ greeting }}</p>
+</template>
+```
+
+Calling the complex `users/create` procedure:
+```vue
+<script setup lang="ts">
+const { data: newUser, execute } = apiClient.users.create.useCall({ 
+  name: 'Andres',
+  email: 'andres@example.com',
+})
+
+// `execute` can be called later, e.g. in a form submission handler
+// const submitForm = () => execute()
+</script>
+```
+
+#### `call`
+
+The `call` method makes a direct API call and is useful for calling procedures from server-side code or when you don't need the features of `useFetch`.
+
+```typescript
+// Calling the simple procedure
+const greeting = await apiClient.hello.call('World')
+// greeting is "Hello, World!"
+
+// Calling the complex procedure
+const newUser = await apiClient.users.create.call({
+  name: 'Andres',
+  email: 'andres@example.com',
+})
+// newUser is { id: '...', name: 'Andres', email: 'andres@example.com' }
+```
 
 ## Contribution
 
