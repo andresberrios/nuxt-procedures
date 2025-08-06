@@ -1,6 +1,19 @@
 # Changelog
 
 
+## v0.1.3
+
+[compare changes](https://github.com/andresberrios/nuxt-procedures/compare/v0.1.2...v0.1.3)
+
+### 🏡 Chore
+
+- **release:** V0.1.2 ([c47c08e](https://github.com/andresberrios/nuxt-procedures/commit/c47c08e))
+- Add keywords to package.json ([f176925](https://github.com/andresberrios/nuxt-procedures/commit/f176925))
+
+### ❤️ Contributors
+
+- Andres Berrios <andres.berrios.j@gmail.com>
+
 ## v0.1.2
 
 [compare changes](https://github.com/andresberrios/nuxt-procedures/compare/v0.1.1...v0.1.2)
