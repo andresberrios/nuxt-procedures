@@ -1,6 +1,18 @@
 # Changelog
 
 
+## v0.1.5
+
+[compare changes](https://github.com/andresberrios/nuxt-procedures/compare/v0.1.4...v0.1.5)
+
+### 🩹 Fixes
+
+- Add missing imports for h3 utilities for procedure definition ([3594da6](https://github.com/andresberrios/nuxt-procedures/commit/3594da6))
+
+### ❤️ Contributors
+
+- Andres Berrios <andres.berrios.j@gmail.com>
+
 ## v0.1.4
 
 [compare changes](https://github.com/andresberrios/nuxt-procedures/compare/v0.1.3...v0.1.4)
