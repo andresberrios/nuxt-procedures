@@ -1,6 +1,6 @@
 {
   "name": "nuxt-procedures",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Nuxt module to define and easily consume your backend API in a validated and type-safe way using procedures and Zod schemas.",
   "repository": "andresberrios/nuxt-procedures",
   "license": "MIT",
