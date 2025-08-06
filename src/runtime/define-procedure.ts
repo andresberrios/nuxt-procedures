@@ -1,5 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import type { EventHandler, H3Event } from 'h3'
+import {
+  type EventHandler,
+  type H3Event,
+  defineEventHandler,
+  readBody,
+} from 'h3'
 import z from 'zod'
 import superjson from 'superjson'
 
