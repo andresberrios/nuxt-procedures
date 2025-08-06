@@ -1,6 +1,19 @@
 # Changelog
 
 
+## v0.1.2
+
+[compare changes](https://github.com/andresberrios/nuxt-procedures/compare/v0.1.1...v0.1.2)
+
+### 🏡 Chore
+
+- **release:** V0.1.1 ([0b4d701](https://github.com/andresberrios/nuxt-procedures/commit/0b4d701))
+- Fix repository details in package.json ([91ca6c4](https://github.com/andresberrios/nuxt-procedures/commit/91ca6c4))
+
+### ❤️ Contributors
+
+- Andres Berrios <andres.berrios.j@gmail.com>
+
 ## v0.1.1
 
 
