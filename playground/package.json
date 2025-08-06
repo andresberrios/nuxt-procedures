@@ -1,0 +1,13 @@
+{
+  "private": true,
+  "name": "nuxt-procedures-playground",
+  "type": "module",
+  "scripts": {
+    "dev": "nuxi dev",
+    "build": "nuxi build",
+    "generate": "nuxi generate"
+  },
+  "dependencies": {
+    "nuxt": "^4.0.1"
+  }
+}
