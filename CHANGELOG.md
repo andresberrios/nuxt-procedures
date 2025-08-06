@@ -1,6 +1,18 @@
 # Changelog
 
 
+## v0.1.4
+
+[compare changes](https://github.com/andresberrios/nuxt-procedures/compare/v0.1.3...v0.1.4)
+
+### 🩹 Fixes
+
+- Fix import path by removing .ts extension ([e2ad913](https://github.com/andresberrios/nuxt-procedures/commit/e2ad913))
+
+### ❤️ Contributors
+
+- Andres Berrios <andres.berrios.j@gmail.com>
+
 ## v0.1.3
 
 [compare changes](https://github.com/andresberrios/nuxt-procedures/compare/v0.1.2...v0.1.3)
