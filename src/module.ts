@@ -64,7 +64,7 @@ export default defineNuxtModule<ModuleOptions>({
 
     addServerImports([
       {
-        from: resolve('./runtime/define-procedure.ts'),
+        from: resolve('./runtime/define-procedure'),
         name: 'defineProcedure',
       },
     ])
