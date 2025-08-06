@@ -2,6 +2,15 @@
   "name": "nuxt-procedures",
   "version": "0.1.2",
   "description": "Nuxt module to define and easily consume your backend API in a validated and type-safe way using procedures and Zod schemas.",
+  "keywords": [
+    "nuxt",
+    "module",
+    "api",
+    "rpc",
+    "procedures",
+    "zod",
+    "type-safe"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/andresberrios/nuxt-procedures.git"
