@@ -7,6 +7,7 @@ import {
   updateTemplates,
   addServerImports,
   addImports,
+  addServerHandler,
 } from '@nuxt/kit'
 import type { Nuxt } from 'nuxt/schema'
 import { camelCase } from 'scule'
@@ -70,6 +71,7 @@ export default defineNuxtModule<ModuleOptions>({
     ])
 
     const createCallerPath = resolve('./runtime/create-caller.ts')
+    const handlerPath = resolve('./runtime/handler.ts')
 
     // Generate API client file
     const generatedClient = addTemplate({
@@ -78,11 +80,24 @@ export default defineNuxtModule<ModuleOptions>({
       write: true,
     })
 
+    // Generate server handler file
+    const generatedHandler = addTemplate({
+      filename: 'nuxt-procedures/server-handler.ts',
+      getContents: () => generateHandlerCode(nuxt, handlerPath),
+      write: true,
+    })
+
+    // Register the server handler
+    addServerHandler({
+      route: '/procedures/**',
+      handler: generatedHandler.dst,
+    })
+
     // Recreate files when the defined procedures change
     nuxt.hook('builder:watch', async (event, path) => {
-      if (path.includes('api')) {
+      if (path.includes('procedures')) {
         updateTemplates({
-          filter: t => t.filename === generatedClient.filename,
+          filter: t => t.filename === generatedClient.filename || t.filename === generatedHandler.filename,
         })
       }
     })
@@ -95,8 +110,7 @@ export default defineNuxtModule<ModuleOptions>({
 
 async function buildRouterStructure(nuxt: Nuxt) {
   const procedureDirs = nuxt.options._layers.map(l =>
-    // join(l.config.serverDir ?? "server", "procedures")
-    join(l.config.serverDir ?? 'server', 'api'),
+    join(l.config.serverDir ?? 'server', 'procedures'),
   )
 
   const router = new Router()
@@ -138,11 +152,30 @@ async function generateClientCode(nuxt: Nuxt, createCallerPath: string) {
 
   return `
     import { createCaller } from "${withoutExtension(createCallerPath)}";
-    
+
     ${procedures
       .map(p => `import type ${p.id} from "${withoutExtension(p.file)}";`)
       .join('\n')}
-    
+
     export const apiClient = ${router[toCode]()};
+  `
+}
+
+async function generateHandlerCode(nuxt: Nuxt, handlerPath: string) {
+  const router = await buildRouterStructure(nuxt)
+  const procedures = router[toList]()
+
+  return `
+    import { createProceduresHandler } from "${withoutExtension(handlerPath)}";
+
+    ${procedures
+      .map(p => `import ${p.id} from "${withoutExtension(p.file)}";`)
+      .join('\n')}
+
+    export default createProceduresHandler({
+      ${procedures
+        .map(p => `"${p.url.slice(1)}": ${p.id}`)
+        .join(',\n      ')}
+    });
   `
 }

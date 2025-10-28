@@ -33,7 +33,7 @@ type UseCall<P extends Procedure<any, any>> = [unknown] extends [
 export function createCaller<P extends Procedure<any, any>>(url: string) {
   return {
     call: ((input: unknown) => {
-      return $fetch<InferProcedureOutput<P>>('/api' + url, {
+      return $fetch<InferProcedureOutput<P>>('/procedures' + url, {
         method: 'POST',
         body: superjson.serialize(input),
         parseResponse: superjson.parse,
@@ -41,7 +41,7 @@ export function createCaller<P extends Procedure<any, any>>(url: string) {
       })
     }) as Call<P>,
     useCall: ((input: InferProcedureInput<P>) => {
-      return useFetch<InferProcedureOutput<P>>('/api' + url, {
+      return useFetch<InferProcedureOutput<P>>('/procedures' + url, {
         key: `${url}: ${JSON.stringify(input)}`,
         method: 'POST',
         body: superjson.serialize(input),

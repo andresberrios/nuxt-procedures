@@ -56,13 +56,13 @@ export default defineNuxtConfig({
 
 ### 1. Define Procedures
 
-Create `.ts` files in your `server/api` directory. The module will automatically create a corresponding client for each file.
+Create `.ts` files in your `server/procedures` directory. The module will automatically create a corresponding client for each file.
 
 #### Simple Example
 
 For a simple input and output, you can use Zod schemas directly.
 
-`server/api/hello.ts`:
+`server/procedures/hello.ts`:
 
 ```typescript
 import { z } from "zod";
@@ -80,7 +80,7 @@ export default defineProcedure({
 
 For more complex scenarios, `z.object` is the way to go. This is useful for things like form submissions or creating database entries.
 
-`server/api/users/create.ts`:
+`server/procedures/users/create.ts`:
 
 ```typescript
 import { z } from "zod";
@@ -116,7 +116,7 @@ export default defineProcedure({
 
 ### 2. Use the `apiClient`
 
-The module automatically generates an `apiClient` that you can use in your components or pages. The structure of the `apiClient` mirrors your `server/api` directory.
+The module automatically generates an `apiClient` that you can use in your components or pages. The structure of the `apiClient` mirrors your `server/procedures` directory.
 
 #### `useCall`
 
