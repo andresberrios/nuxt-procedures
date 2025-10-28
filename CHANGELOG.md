@@ -1,6 +1,22 @@
 # Changelog
 
 
+## v0.1.6
+
+[compare changes](https://github.com/andresberrios/nuxt-procedures/compare/v0.1.5...v0.1.6)
+
+### 🚀 Enhancements
+
+- **procedures:** Use server/procedures directory ([f396936](https://github.com/andresberrios/nuxt-procedures/commit/f396936))
+
+### 🏡 Chore
+
+- **docs:** Improve README ([2ba649b](https://github.com/andresberrios/nuxt-procedures/commit/2ba649b))
+
+### ❤️ Contributors
+
+- Andres Berrios <andres.berrios.j@gmail.com>
+
 ## v0.1.5
 
 [compare changes](https://github.com/andresberrios/nuxt-procedures/compare/v0.1.4...v0.1.5)
