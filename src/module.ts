@@ -8,8 +8,8 @@ import {
   addServerImports,
   addImports,
   addServerHandler,
+  getLayerDirectories,
 } from '@nuxt/kit'
-import type { Nuxt } from 'nuxt/schema'
 import { camelCase } from 'scule'
 
 const toCode = Symbol('toCode')
@@ -76,14 +76,14 @@ export default defineNuxtModule<ModuleOptions>({
     // Generate API client file
     const generatedClient = addTemplate({
       filename: 'nuxt-procedures/api-client.ts',
-      getContents: () => generateClientCode(nuxt, createCallerPath),
+      getContents: () => generateClientCode(createCallerPath),
       write: true,
     })
 
     // Generate server handler file
     const generatedHandler = addTemplate({
       filename: 'nuxt-procedures/server-handler.ts',
-      getContents: () => generateHandlerCode(nuxt, handlerPath),
+      getContents: () => generateHandlerCode(handlerPath),
       write: true,
     })
 
@@ -108,10 +108,10 @@ export default defineNuxtModule<ModuleOptions>({
   },
 })
 
-async function buildRouterStructure(nuxt: Nuxt) {
-  const procedureDirs = nuxt.options._layers.map(l =>
-    join(l.config.serverDir ?? 'server', 'procedures'),
-  )
+async function buildRouterStructure() {
+  const procedureDirs = getLayerDirectories()
+    .map(l => join(l.server, 'procedures'))
+    .reverse()
 
   const router = new Router()
 
@@ -146,8 +146,8 @@ function withoutExtension(file: string) {
   return file.slice(0, -parse(file).ext.length)
 }
 
-async function generateClientCode(nuxt: Nuxt, createCallerPath: string) {
-  const router = await buildRouterStructure(nuxt)
+async function generateClientCode(createCallerPath: string) {
+  const router = await buildRouterStructure()
   const procedures = router[toList]()
 
   return `
@@ -161,8 +161,8 @@ async function generateClientCode(nuxt: Nuxt, createCallerPath: string) {
   `
 }
 
-async function generateHandlerCode(nuxt: Nuxt, handlerPath: string) {
-  const router = await buildRouterStructure(nuxt)
+async function generateHandlerCode(handlerPath: string) {
+  const router = await buildRouterStructure()
   const procedures = router[toList]()
 
   return `
