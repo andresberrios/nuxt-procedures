@@ -1,6 +1,18 @@
 # Changelog
 
 
+## v0.1.8
+
+[compare changes](https://github.com/andresberrios/nuxt-procedures/compare/v0.1.7...v0.1.8)
+
+### 🚀 Enhancements
+
+- **procedures:** Return HTTP errors on input/output validation failure ([49fdc4d](https://github.com/andresberrios/nuxt-procedures/commit/49fdc4d))
+
+### ❤️ Contributors
+
+- Andres Berrios <andres.berrios.j@gmail.com>
+
 ## v0.1.7
 
 [compare changes](https://github.com/andresberrios/nuxt-procedures/compare/v0.1.6...v0.1.7)
