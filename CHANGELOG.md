@@ -1,6 +1,18 @@
 # Changelog
 
 
+## v0.1.9
+
+[compare changes](https://github.com/andresberrios/nuxt-procedures/compare/v0.1.8...v0.1.9)
+
+### 🩹 Fixes
+
+- **procedures:** Import createError from h3 instead of #app ([b99e7e2](https://github.com/andresberrios/nuxt-procedures/commit/b99e7e2))
+
+### ❤️ Contributors
+
+- Andres Berrios <andres.berrios.j@gmail.com>
+
 ## v0.1.8
 
 [compare changes](https://github.com/andresberrios/nuxt-procedures/compare/v0.1.7...v0.1.8)
