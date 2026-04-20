@@ -4,10 +4,10 @@ import {
   type H3Event,
   defineEventHandler,
   readBody,
+  createError,
 } from 'h3'
 import z from 'zod'
 import superjson from 'superjson'
-import { createError } from '#app'
 
 export interface Procedure<
   I extends z.ZodTypeAny = z.ZodUndefined,
