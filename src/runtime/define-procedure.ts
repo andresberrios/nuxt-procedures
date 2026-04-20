@@ -7,6 +7,7 @@ import {
 } from 'h3'
 import z from 'zod'
 import superjson from 'superjson'
+import { createError } from '#app'
 
 export interface Procedure<
   I extends z.ZodTypeAny = z.ZodUndefined,
@@ -52,16 +53,34 @@ export function defineProcedure(
     handler: (args: any) => any
   },
 ) {
+  const voidSchema = z.void()
+
   const h = defineEventHandler(async (event) => {
-    // For now we ignore the provided inputs if there is no inputSchema
-    // In the future we might want to throw an error to make it more strict
-    const input = inputSchema
-      ? inputSchema.parse(superjson.deserialize(await readBody(event)))
-      : undefined
+    const inputParser = inputSchema ?? voidSchema
+    const inputRaw = superjson.deserialize(await readBody(event))
+    const parseResult = inputParser.safeParse(inputRaw)
+    if (!parseResult.success) {
+      throw createError({
+        status: 400,
+        message: 'Invalid procedure input',
+        data: parseResult.error,
+      })
+    }
+    const input = parseResult.data
 
     const outputRaw = await handler(inputSchema ? { input, event } : { event })
-    const output = outputSchema.parse(outputRaw)
-    return superjson.serialize(output)
+    const outputParseResult = outputSchema.safeParse(outputRaw)
+    if (!outputParseResult.success) {
+      throw createError({
+        status: 500,
+        message: 'Invalid procedure output',
+        data: {
+          error: outputParseResult.error,
+          received: outputRaw,
+        },
+      })
+    }
+    return superjson.serialize(outputParseResult.data)
   })
 
   const procedure = h as any
