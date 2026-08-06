@@ -1,6 +1,18 @@
 # Changelog
 
 
+## v0.1.10
+
+[compare changes](https://github.com/andresberrios/nuxt-procedures/compare/v0.1.9...v0.1.10)
+
+### 🩹 Fixes
+
+- **procedures:** Preserve error response data instead of breaking it with superjson ([dfb3a64](https://github.com/andresberrios/nuxt-procedures/commit/dfb3a64))
+
+### ❤️ Contributors
+
+- Andres Berrios <andres.berrios.j@gmail.com>
+
 ## v0.1.9
 
 [compare changes](https://github.com/andresberrios/nuxt-procedures/compare/v0.1.8...v0.1.9)
