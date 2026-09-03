@@ -3,6 +3,7 @@
     <div>basic</div>
     <pre id="success-result">{{ successResult }}</pre>
     <pre id="error-result">{{ errorResult }}</pre>
+    <pre id="void-result">{{ voidResult }}</pre>
   </div>
 </template>
 
@@ -25,6 +26,21 @@ catch (err) {
     threw: true,
     statusCode: err.statusCode,
     data: err.data,
+  }))
+}
+
+let voidResult
+try {
+  const nothing = await apiClient.returnsNothing.call()
+  voidResult = encodeURIComponent(JSON.stringify({
+    threw: false,
+    isUndefined: nothing === undefined,
+  }))
+}
+catch (err) {
+  voidResult = encodeURIComponent(JSON.stringify({
+    threw: true,
+    statusCode: err.statusCode,
   }))
 }
 </script>
