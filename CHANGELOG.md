@@ -1,6 +1,18 @@
 # Changelog
 
 
+## v0.1.11
+
+[compare changes](https://github.com/andresberrios/nuxt-procedures/compare/v0.1.10...v0.1.11)
+
+### 🩹 Fixes
+
+- **procedures:** Return 404 instead of 204 for unknown procedure paths ([1915fe1](https://github.com/andresberrios/nuxt-procedures/commit/1915fe1))
+
+### ❤️ Contributors
+
+- Andres Berrios <andres.berrios.j@gmail.com>
+
 ## v0.1.10
 
 [compare changes](https://github.com/andresberrios/nuxt-procedures/compare/v0.1.9...v0.1.10)
