@@ -153,6 +153,20 @@ const newUser = await apiClient.users.create.call({
 // newUser is { id: '...', name: 'Andres', email: 'andres@example.com' }
 ```
 
+### 3. Call a procedure from server code
+
+`invokeProcedure` runs a procedure in-process, without HTTP or superjson: the input is a plain value checked against the procedure's input schema, the handler runs with the event you pass, and the parsed output comes back as is. Invalid input throws the same 400 error as the HTTP path, invalid output the same 500.
+
+```ts
+// server/routes/example.get.ts
+import getUser from '../procedures/getUser'
+
+export default defineEventHandler(async (event) => {
+  const user = await invokeProcedure(getUser, { input: { id: '42' }, event })
+  return user
+})
+```
+
 ## Contribution
 
 <details>

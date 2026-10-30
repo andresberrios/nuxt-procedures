@@ -68,6 +68,10 @@ export default defineNuxtModule<ModuleOptions>({
         from: resolve('./runtime/define-procedure'),
         name: 'defineProcedure',
       },
+      {
+        from: resolve('./runtime/define-procedure'),
+        name: 'invokeProcedure',
+      },
     ])
 
     const createCallerPath = resolve('./runtime/create-caller.ts')

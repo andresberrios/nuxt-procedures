@@ -16,6 +16,7 @@ export interface Procedure<
   __procedureMetadata: {
     inputSchema: I
     outputSchema: O
+    handler: Handler<I, O>
   }
 }
 
@@ -53,38 +54,59 @@ export function defineProcedure(
     handler: (args: any) => any
   },
 ) {
-  const voidSchema = z.void()
-
-  const h = defineEventHandler(async (event) => {
-    const inputParser = inputSchema ?? voidSchema
+  const procedure = defineEventHandler(async (event) => {
     const inputRaw = superjson.deserialize(await readBody(event))
-    const parseResult = inputParser.safeParse(inputRaw)
-    if (!parseResult.success) {
-      throw createError({
-        status: 400,
-        message: 'Invalid procedure input',
-        data: parseResult.error,
-      })
-    }
-    const input = parseResult.data
-
-    const outputRaw = await handler(inputSchema ? { input, event } : { event })
-    const outputParseResult = outputSchema.safeParse(outputRaw)
-    if (!outputParseResult.success) {
-      throw createError({
-        status: 500,
-        message: 'Invalid procedure output',
-        data: {
-          error: outputParseResult.error,
-          received: outputRaw,
-        },
-      })
-    }
-    return superjson.serialize(outputParseResult.data)
-  })
-
-  const procedure = h as any
-  procedure.__procedureMetadata = { inputSchema, outputSchema }
+    const output = await runProcedure(procedure, inputRaw, event)
+    return superjson.serialize(output)
+  }) as any
+  procedure.__procedureMetadata = { inputSchema, outputSchema, handler }
 
   return procedure
+}
+
+const voidSchema = z.void()
+
+/**
+ * Validates the input, runs the handler and validates its output, throwing
+ * the same 400/500 errors as the HTTP path. Shared by the HTTP handler and
+ * `invokeProcedure`; serialization stays in the HTTP path.
+ */
+async function runProcedure(procedure: Procedure<any, any>, inputRaw: unknown, event: H3Event) {
+  const { inputSchema, outputSchema, handler } = procedure.__procedureMetadata
+  const parseResult = (inputSchema ?? voidSchema).safeParse(inputRaw)
+  if (!parseResult.success) {
+    throw createError({
+      status: 400,
+      message: 'Invalid procedure input',
+      data: parseResult.error,
+    })
+  }
+  const input = parseResult.data
+
+  const outputRaw = await handler(inputSchema ? { input, event } : { event })
+  const outputParseResult = outputSchema.safeParse(outputRaw)
+  if (!outputParseResult.success) {
+    throw createError({
+      status: 500,
+      message: 'Invalid procedure output',
+      data: {
+        error: outputParseResult.error,
+        received: outputRaw,
+      },
+    })
+  }
+  return outputParseResult.data
+}
+
+/**
+ * Calls a procedure from server code without going through HTTP or superjson:
+ * `input` is a plain value checked against the procedure's input schema, the
+ * handler runs with the given event, and the parsed output is returned as is
+ * (a `Date` stays a `Date`). Errors are the same as on the HTTP path.
+ */
+export function invokeProcedure<I extends z.ZodTypeAny, O extends z.ZodTypeAny>(
+  procedure: Procedure<I, O>,
+  args: { event: H3Event } & (I extends z.ZodUndefined ? { input?: undefined } : { input: z.input<I> }),
+): Promise<z.output<O>> {
+  return runProcedure(procedure, (args as { input?: unknown }).input, args.event)
 }

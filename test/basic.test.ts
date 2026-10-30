@@ -74,6 +74,17 @@ describe('ssr', async () => {
     expect(res.status).toBe(200)
     expect(await res.json()).toEqual({ ok: true })
   })
+
+  it('runs a procedure in-process with plain values and the HTTP error codes', async () => {
+    const res = await fetch('/invoke-echo-date')
+    expect(res.status).toBe(200)
+    expect(await res.json()).toEqual({
+      isDate: true,
+      iso: '2024-01-01T00:00:00.000Z',
+      invalidStatus: 400,
+      thrownStatus: 400,
+    })
+  })
 })
 
 function extractJson(html: string, elementId: string) {
