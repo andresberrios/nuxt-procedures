@@ -1,6 +1,18 @@
 # Changelog
 
 
+## v0.1.13
+
+[compare changes](https://github.com/andresberrios/nuxt-procedures/compare/v0.1.12...v0.1.13)
+
+### 🚀 Enhancements
+
+- Invoke procedures in-process with invokeProcedure ([aa6cc75](https://github.com/andresberrios/nuxt-procedures/commit/aa6cc75))
+
+### ❤️ Contributors
+
+- Andres Berrios <andres.berrios.j@gmail.com>
+
 ## v0.1.12
 
 [compare changes](https://github.com/andresberrios/nuxt-procedures/compare/v0.1.11...v0.1.12)
